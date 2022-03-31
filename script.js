@@ -1,9 +1,12 @@
 let prevNumber = ''
 let calculationOperator = ''
 let currentNumber = ''
+const calculationList = []
 
 //mengambil element class calculator-screen
 const calculatorScreen = document.querySelector('.calculator-screen')
+
+const calculationScreen = document.querySelector('.calculation-screen')
 
 //mengambil semua element class operator
 const operators = document.querySelectorAll(".operator")
@@ -20,9 +23,14 @@ const decimal = document.querySelector('.decimal')
 
 const percentage = document.querySelector('.percentage')
 
+const empty = (list) =>{
+    list.length = 0;
+}
+
 //update nilai pada tag input
 const updateScreen = (number) => {
     calculatorScreen.value = number
+    calculationScreen.value = calculationList.join('')
 }
 
 //memasukkan value yang diinput ke variabel currentNumber
@@ -38,12 +46,19 @@ const inputOperator = (operator) => {
     if (calculationOperator === '') {
         //memindahkan data pada currentNumber ke prevNumber
         prevNumber = currentNumber
+        calculationList.push(currentNumber);
+        if (operator === "*") {
+            calculationList.push("\u00d7")
+        } else if(operator === "*"){
+            calculationList.push("\u00f7")
+        }else{
+            calculationList.push(operator)
+        }
     }
     //menyimpan value operator ke calculationOperator
     calculationOperator = operator
     //mengosongkan variabel currentNumber
     currentNumber = ''
-    // console.log(calculationOperator)
 }
 
 inputDecimal = (dot) => {
@@ -57,12 +72,12 @@ const clearAll = () => {
     prevNumber = ''
     calculationOperator = ''
     currentNumber = '0'
+    empty(calculationList)
 }
 
 operators.forEach((operator) => {
     operator.addEventListener("click", (event) => {
-        inputOperator(event.target.value)
-        
+        inputOperator(event.target.value)  
     })
 })
 
@@ -80,6 +95,8 @@ numbers.forEach((number)=>{
 equalSign.addEventListener('click', () => {
     calculate()
     updateScreen(currentNumber)
+    empty(calculationList)
+    console.log(currentNumber)
 })
 
 clearBtn.addEventListener('click', () => {
@@ -96,6 +113,8 @@ percentage.addEventListener('click', () => {
     if (currentNumber !== '') {
         result = parseFloat(currentNumber) / 100
         currentNumber = result
+        empty(calculationList)
+        calculationList.push(currentNumber)
         updateScreen(currentNumber)
     }
     console.log(currentNumber)
@@ -105,6 +124,7 @@ const calculate = () => {
     let result = ''
     switch (calculationOperator) {
         case "+":
+            // convert string to float and save to result
             result = parseFloat(prevNumber) + parseFloat(currentNumber)
             break
         case "-":
@@ -119,13 +139,7 @@ const calculate = () => {
         default:
             return 
     }
+    calculationList.push(currentNumber)
     currentNumber = result
     calculationOperator = ''
 }
-
-
-
-//mendapatkan value button
-// console.log(event.target.value)
-
-
