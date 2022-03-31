@@ -111,11 +111,11 @@ decimal.addEventListener('click', (event) => {
 
 percentage.addEventListener('click', () => {
     if (currentNumber !== '') {
+        calculationList.push(currentNumber,"%")
         result = parseFloat(currentNumber) / 100
         currentNumber = result
-        empty(calculationList)
-        calculationList.push(currentNumber)
         updateScreen(currentNumber)
+        empty(calculationList)
     }
     console.log(currentNumber)
 })
